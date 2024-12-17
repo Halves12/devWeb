@@ -8,7 +8,7 @@ export interface produtosInterface {
 
 
   
-  export const produtos: produtosInterface[] = [
+export let produtos: produtosInterface[] = [
     {
       id: "1",
       nome: "Smartphone X10",
@@ -80,6 +80,10 @@ export interface produtosInterface {
       promocao: false,
     },
   ];
+
+  export function updateProdutos(updatedProdutos: produtosInterface[]): void {
+    produtos = updatedProdutos;
+  }
   
   console.log(produtos);
   

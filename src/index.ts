@@ -1,6 +1,8 @@
 import express, { response } from "express";
 import cors from "cors";
 import { produtos, produtosInterface } from "./produtos";
+import { updateProdutos } from './produtos';
+
 
 const app = express();
 
@@ -49,11 +51,51 @@ const params = request.params.id
  if(!atualizarProduto){
      return response.status(400).send({message: "Produto não encontrado"})
  }
- 
- 
 
- console.log(atualizarProduto)
+  // Atualizando as informações do produto
+
+  const body = request.body
+ 
+  atualizarProduto.nome = body.nome || atualizarProduto.nome;
+  atualizarProduto.descricao = body.descricao || atualizarProduto.descricao;
+  atualizarProduto.preco = body.preco || atualizarProduto.preco;
+  atualizarProduto.promocao = body.promocao || atualizarProduto.promocao;
+
+  response.status(200).json(produtos)
+ 
+ 
+ 
 })
+
+app.delete("/deletar-produto/:id", (request, response)=>{
+const params = request.params.id
+
+const deletarProduto = produtos.find((produto) => {
+    return produto.id === params;
+})
+
+if(!deletarProduto){
+    return response.status(400).send({message: "Produto não encontrado"})
+}
+       
+// Removendo o produto da lista de produtos (usando filter)
+
+
+const updatedProdutos = produtos.filter((produto) => produto.id !== params);
+
+
+// Atualizando a lista de produtos
+updateProdutos(updatedProdutos);
+
+// Respondendo com sucesso
+updateProdutos(updatedProdutos); // atualizar produtos usando a função updateProdutos
+return response.status(200).json(updatedProdutos);
+
+})
+
+
+
+
 
 app.listen(3000, ()=>{
 console.log("SERVIDOR ON NA PORTA 3000")
